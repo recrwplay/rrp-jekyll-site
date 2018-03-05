@@ -1,0 +1,67 @@
+---
+layout: default
+pagination: 
+  enabled: true
+---
+<div class="home">
+  
+  {% if site.posts.size > 0 %}
+      
+    <!-- This loops through the paginated posts -->
+    {% for post in paginator.posts %}
+    <div class="entry-listing">
+
+        {% if post.image %}
+        {% assign imgParts = post.image | split: '/' %}
+        <!-- {% assign imgFile = imgParts | pop %} -->
+        {% assign imgPath = imgParts | join: '/' %}
+        <div class="entry-image">
+            <a href="{{ post.url }}">
+              <img 
+              data-src="{{ imgParts | pop | pop | join: '/' }}/w_auto,c_scale/{{ imgParts | last }}" 
+              class="cld-responsive">
+            </a>
+        </div>
+        {% endif %}
+
+        <div class="entry-meta">
+            <span class="entry-date">
+                <span class="date">{{ post.date | date_to_long_string }}</span>
+            </span>      
+        </div>
+        <h2 class="entry-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
+        
+        <div class="entry-summary ">
+          {{ post.excerpt | truncatewords:35 }}
+        </div>
+    </div>
+    
+    {% endfor %}
+  
+  <!-- Pagination links -->
+  <div class="pagination">
+    {% if paginator.page_trail %}
+
+    {% if paginator.first_page and page.url != paginator.first_page_path %}
+      <span class="previous">
+          <a href="{{ paginator.first_page_path | prepend: site.baseurl | replace: '//', '/' }}">&laquo;</a>
+      </span>
+    {% endif %}
+
+    {% for trail in paginator.page_trail %}
+      <span {% if page.url == trail.path %}class="selected"{% endif %}>
+          <a href="{{ trail.path | prepend: site.baseurl }}" title="{{trail.title}}">{{ trail.num }}</a>
+      </span>
+    {% endfor %}
+
+    {% if paginator.last_page and page.url != paginator.last_page_path %}
+      <span class="previous">
+          <a href="{{ paginator.last_page_path | prepend: site.baseurl | replace: '//', '/' }}">&raquo;</a>
+      </span>
+    {% endif %}
+  {% endif %}
+  </div>
+  
+    {% endif %}
+  
+  </div>
